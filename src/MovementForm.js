@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as _ from 'lodash';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 class MovementForm extends Component {
   
@@ -21,7 +21,7 @@ class MovementForm extends Component {
     };
 
     // List of Movements
-    this.state.movements =  [{id: 1, description: 'Went to McDonalds', amount: 675}];
+    this.state.movements =  [{id: new Date(), description: 'Went to McDonalds', amount: 675}];
     
   }
 
@@ -59,7 +59,17 @@ class MovementForm extends Component {
     this.setState({
       movements: [...this.state.movements, movement]
     });
+    this.setState({
+      description: '',
+      amount: 0
+    });
+  }
 
+  removeMovement(id) {
+    console.log(id);
+    this.setState({
+      movements: _.reject(this.state.movement, (x, i) => x.id === id)
+    })
   }
 
   // Set values to nested and non nested variables
@@ -92,13 +102,13 @@ class MovementForm extends Component {
           <small> It is {this.state.date.toLocaleTimeString()}. What did you do today?</small>
         </h1>
         <form>
-          <div class="form-group">
-            <label for="description">Description</label>
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
             <input type="text" className="form-control" name="description" placeholder="Description" value={this.state.description} onChange={this.handleChange}/>
           </div>
 
-          <div class="form-group">
-            <label for="amount">Amount</label>
+          <div className="form-group">
+            <label htmlFor="amount">Amount</label>
             <input type="number" className="form-control" name="amount" placeholder="Amount" value={this.state.amount} onChange={this.handleChange}/>
           </div>
           
@@ -109,10 +119,15 @@ class MovementForm extends Component {
 
         <br/>
 
-        <ul>
-        {this.state.movements.map((m, i) => {
-          return <li key={m.id}> I {m.description} and paid {m.amount} </li>
-        })}
+        <ul className="list-group">
+        {this.state.movements.map((m, i) => 
+            <li className="list-group-item" key={m.id}>
+              I {m.description}, and it cost me {m.amount}
+              <span className="badge" style={{cursor:'pointer'}} onClick={() => this.removeMovement(m.id)}>
+                <i className="fa fa-times"></i>
+              </span>
+            </li>
+        )}
         </ul>
 
       </div>
