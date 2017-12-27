@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import * as _ from 'lodash';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class MovementForm extends Component {
   
@@ -9,22 +11,17 @@ class MovementForm extends Component {
     // Binding Methods to Current Context
     this.handleChange = this.handleChange.bind(this);
     this.setDepth = this.setDepth.bind(this);
+    this.addMovement = this.addMovement.bind(this);
     
     // State Primary Variables
-    this.state = {};
-
-    // Current Date (Updates automatically)
-    this.state.date = new Date();
-
-    this.movement = {
+    this.state = {
+      date: new Date(),
       description: '',
       amount: 0
     };
 
     // List of Movements
-    this.state.movements =  ([{id: 1, description: 'Went to McDonalds', amount: 675}]).map((m) => {
-      return <p key={m.id}> I {m.description} and paid {m.amount} </p>
-    });
+    this.state.movements =  [{id: 1, description: 'Went to McDonalds', amount: 675}];
     
   }
 
@@ -40,8 +37,8 @@ class MovementForm extends Component {
 
   handleChange(event) {
     let _state = this.setDepth({}, event.target.name, event.target.value);
+    _state = _.merge(this.state, _state);
     this.setState(_state);
-    console.log(this.state);
   }
 
   // Updates the current Time
@@ -54,7 +51,15 @@ class MovementForm extends Component {
   // Add a Movement into the Movement List
   addMovement(e) {
     e.preventDefault();
-    alert('Yai!');
+    let movement = {
+      id: new Date(),
+      description: this.state.description,
+      amount: this.state.amount
+    };
+    this.setState({
+      movements: [...this.state.movements, movement]
+    });
+
   }
 
   // Set values to nested and non nested variables
@@ -71,21 +76,44 @@ class MovementForm extends Component {
     return obj;
   }
 
+  // Get values from nested objects
+  getDepth(obj, path) {
+    return path.split('.').reduce((value, tag) => {
+      return value[tag];
+    }, obj);
+  }
+
   render() {
     return (
       <div>
-        <h1> {this.state.header} {this.props.name}</h1>
-        <h2> It is {this.state.date.toLocaleTimeString()}. What did you do today?</h2>
+        <h1 className="text-center">
+          Movement Form 
+          <br/>
+          <small> It is {this.state.date.toLocaleTimeString()}. What did you do today?</small>
+        </h1>
         <form>
-          <input type="text" id="description" name="movement.description" placeholder="Description" onChange={this.handleChange}/>
-          <br/>
-          <input type="number" id="amount" name="movement.amount" placeholder="Amount" onChange={this.handleChange}/>
-          <br/>
-          <button type="submit" onClick={this.addMovement}> Save </button> &nbsp;
-          <button type="button" onClick={this.toggleLanguage}> Change Language </button>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" className="form-control" name="description" placeholder="Description" value={this.state.description} onChange={this.handleChange}/>
+          </div>
+
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <input type="number" className="form-control" name="amount" placeholder="Amount" value={this.state.amount} onChange={this.handleChange}/>
+          </div>
+          
+          <button type="submit" className="btn btn-primary" onClick={this.addMovement}> Save </button> &nbsp;
+          <button type="button" className="btn btn-default" onClick={this.toggleLanguage}> Clear </button>
+
         </form>
 
-        {this.state.movements}
+        <br/>
+
+        <ul>
+        {this.state.movements.map((m, i) => {
+          return <li key={m.id}> I {m.description} and paid {m.amount} </li>
+        })}
+        </ul>
 
       </div>
     );
