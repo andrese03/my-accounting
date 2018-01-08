@@ -5,10 +5,16 @@ class FuelForm extends Component {
     constructor(props) {
         super(props);
         this.state = {};
+        this.submit = this.submit.bind(this);
+    }
+
+    submit() {
     }
 
     render = () => (
         <form>
+            <h1>Did you Fill Up the Car?</h1>
+            
             <div className="form-group">
                 <label htmlFor="description">When?</label>
                 <input type="date" className="form-control" name="createdDate" value={this.state.createdDate} onChange={this.handleChange} />
@@ -25,7 +31,7 @@ class FuelForm extends Component {
             
 
             <button type="submit" className="btn btn-primary" onClick={this.addMovement}> Save </button> &nbsp;
-          <button type="button" className="btn btn-default" onClick={this.toggleLanguage}> Clear </button>
+            <button type="button" className="btn btn-default" onClick={this.toggleLanguage}> Clear </button>
 
         </form>
     )
