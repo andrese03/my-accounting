@@ -11,7 +11,7 @@ class App extends Component {
         return (
             <div>
                 <NavBar/>
-                <div className="container">
+                <div className="container-fluid">
                     <div className="row">
                         <div className="col">
                             <FuelContainer />
