@@ -1,6 +1,4 @@
-
 import { FUEL_CREATE_RECORD } from './constants';
-import { combineReducers } from 'redux';
 
 const fuelRefillsReducer = (state = [], action) => {
 
@@ -9,15 +7,16 @@ const fuelRefillsReducer = (state = [], action) => {
     switch (action.type) {
         case FUEL_CREATE_RECORD:
             state = [...state, action.data];
-            // window.localStorage.setItem('fuelRefills', state);
             break;
         default:
-            return state;
+            break;
     }
+
+    return state;
 }
 
-const reducer = combineReducers({
+const reducer = {
     fuelRefills: fuelRefillsReducer
-});
+};
 
 export default reducer;
